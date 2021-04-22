@@ -155,25 +155,18 @@ function updateUser($id, $options, $email = '', $username = '', $pwd = '', $admi
             $query->bindParam("email", $email);
             $query->bindParam("id", $id);
             $query->execute();
-            if ($query)
-                return true;
             break;
         case 'username':
             $sql = "UPDATE registration SET username = :uname WHERE user_id = :id";
             $query = connect()->prepare($sql);
             $query->bindParam("uname", $username);
             $query->bindParam("id", $id);
-            $query->execute();
-            if ($query)
-                return true;
-            break;
+           return $query->execute();
         case 'password':
             $sql = "UPDATE registration SET password = :pwd WHERE user_id = :id";
             $query = connect()->prepare($sql);
             $params = [ "pwd" => password_hash($pwd, PASSWORD_BCRYPT), "id" => $id];
             $query->execute($params);
-            if ($query)
-                return true;
             break;
         case 'img':
             $sql = "UPDATE registration SET profile_pic = :prp WHERE user_id = :id";
@@ -181,8 +174,6 @@ function updateUser($id, $options, $email = '', $username = '', $pwd = '', $admi
             $query->bindParam("prp", $profileP);
             $query->bindParam("id", $id);
             $query->execute();
-            if ($query)
-                return true;
             break;
         case 'is_admin':
             $sql = "UPDATE registration SET is_admin = :admin WHERE user_id = :id";
@@ -190,16 +181,12 @@ function updateUser($id, $options, $email = '', $username = '', $pwd = '', $admi
             $query->bindParam("admin", $admin);
             $query->bindParam("id", $id);
             $query->execute();
-            if ($query)
-                return true;
             break;
         default:
             $sql = "UPDATE registration SET :email, :uname, :pw, :admin, :profile WHERE user_id = :id";
             $query = connect()->prepare($sql);
             $params = ["email" => $email, "uname" =>$username, "pw" => password_hash($pwd, PASSWORD_BCRYPT), "admin"=>$admin, "prp"=>$profileP, "id" => $id];
             $query->execute($params);
-            if ($query)
-                return true;
             break;
     }
     return null;
@@ -222,9 +209,8 @@ function deleteUser($id): bool
         $bindParams = ["user_id" => $id, "playlist_id" => $playlistID];
         $delete = $connect->prepare($deleteQuery);
         $delete->execute($bindParams);
-        if ($delete)
-            return true;
         $connect = null;
+        return true;
     }
     return false;
 }
@@ -255,7 +241,7 @@ function updatePlaylist($playlist_id, $name)
     return $query;
 }
 
-function deletePlaylist($id): bool
+function deletePlaylist($id)
 {
     $sql = "DELETE FROM songs WHERE playlist_id = ?;
             DELETE FROM playlist WHERE playlist_id = ?;";
@@ -263,9 +249,7 @@ function deletePlaylist($id): bool
     $query->bindParam(1, $id);
     $query->bindParam(2, $id);
     $query->execute();
-    if ($query)
-        return true;
-    return false;
+    return $query;
 }
 
 function addSongs_toPlaylist($playlist_id, $name, $artist, $size, $album = '') //update size of playlist or add songs to that playlist id
@@ -417,7 +401,6 @@ function viewPlaylist($options, $user, $playlist = 0)
             $result = $query->fetchAll();
             if ($result)
             {
-                 //var_dump($result);
                 foreach ($result as $data): ?>
                     <li class="w3-bar">
                         <div class="w3-padding w3-right">
@@ -501,7 +484,6 @@ function viewSongs_fromPlaylist($playlist_id): array
     $query->bindParam(1, $playlist_id);
     $query->execute();
     $result = $query->fetchAll();
-    //var_dump($result);
     if ($result)
     {
         foreach ($result as $data): ?>
@@ -544,7 +526,7 @@ function shufflePlaceholders($key): string
         ['artist' => 'Foo Fighters', 'album' => 'The Colour And The Shape', 'song' => 'Everlong'],
         ['artist' => 'Foghat', 'album' => 'Fool for the City', 'song' => 'Slow Ride'],
         ['artist' => 'Kansas', 'album' => 'Leftoverture', 'song' => 'Carry on Wayward Son'],
-        ['artist' => 'KISS', 'album' => 'Dressed to Kill', 'song' => 'Rock And Roll All Nite'],
+        ['artist' => 'KISS', 'album' => 'Double Platinum', 'song' => 'Detroit Rock City'],
         ['artist' => 'Lynyrd Skynyrd', 'album' => 'Pronounced\' Leh-\'Nerd \'Skin-\'Nerd', 'song' => 'Free Bird']];
    shuffle($placeholders);
    return $placeholders[0][$key];

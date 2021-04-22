@@ -145,7 +145,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && $edit == 1 && !isset($_GET['playlist'
                 //Show success
                 if ($_SESSION['userID'] == $id)
                     $_SESSION['username'] = $uname;
-                header("Location: ./users.php"); //Success, Redirect to GET request so the form isn't submitted every refresh!
+                header("Location: ./edit.php?user=$id"); //Success, Redirect to GET request so the form isn't submitted every refresh!
                 $_SESSION["success"] = getUser($id, 'name') . " successfully updated!";
                 $_SESSION['error'] = false;
             }

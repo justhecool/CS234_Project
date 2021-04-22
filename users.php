@@ -18,7 +18,7 @@ global $username;
                 $error_msg = '<div class="w3-panel w3-';
                 (isset($_SESSION['success']) == true) ? $error_msg .= "green" : $error_msg .= "red";
                 $error_msg .= ' w3-center w3-display-container" style=""><h1>';
-                (isset($_SESSION['error']) == true && $_SESSION['error'] == true) ? $error_msg .= $_SESSION['error'] : $error_msg.= $_SESSION['success'];
+//                (isset($_SESSION['error']) == true && $_SESSION['error'] == true) ? $error_msg .= $_SESSION['error'] : $error_msg.= $_SESSION['success'];
                 if (isset($_SESSION['add'])) $error_msg .= "User Successfully Added!";
                 elseif (isset($_SESSION['delete'])) $error_msg .= "User Successfully Deleted!";
                 //else $error_msg .= "Something went wrong, try again..";
